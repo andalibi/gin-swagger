@@ -24,6 +24,7 @@ type swaggerConfig struct {
 	DeepLinking              bool
 	PersistAuthorization     bool
 	Oauth2DefaultClientID    string
+	SyntaxHighlight          bool
 }
 
 // Config stores ginSwagger configuration variables.
@@ -37,6 +38,7 @@ type Config struct {
 	DeepLinking              bool
 	PersistAuthorization     bool
 	Oauth2DefaultClientID    string
+	SyntaxHighlight          bool
 }
 
 func (config Config) toSwaggerConfig() swaggerConfig {
@@ -51,6 +53,7 @@ func (config Config) toSwaggerConfig() swaggerConfig {
 		Title:                 config.Title,
 		PersistAuthorization:  config.PersistAuthorization,
 		Oauth2DefaultClientID: config.Oauth2DefaultClientID,
+		SyntaxHighlight:       config.SyntaxHighlight,
 	}
 }
 
@@ -216,7 +219,11 @@ func DisablingWrapHandler(handler *webdav.Handler, envName string) gin.HandlerFu
 
 // DisablingCustomWrapHandler turn handler off
 // if specified environment variable passed.
-func DisablingCustomWrapHandler(config *Config, handler *webdav.Handler, envName string) gin.HandlerFunc {
+func DisablingCustomWrapHandler(
+	config *Config,
+	handler *webdav.Handler,
+	envName string,
+) gin.HandlerFunc {
 	if os.Getenv(envName) != "" {
 		return func(c *gin.Context) {
 			// Simulate behavior when route unspecified and
@@ -253,6 +260,7 @@ window.onload = function() {
   // Build a system
   const ui = SwaggerUIBundle({
     url: "{{.URL}}",
+	syntaxHighlight: {{.SyntaxHighlight}},
     dom_id: '#swagger-ui',
     validatorUrl: null,
     oauth2RedirectUrl: {{.Oauth2RedirectURL}},
